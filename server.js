@@ -1,28 +1,25 @@
 let http = require('http');
-let morgan = require('morgan');
+let cors = require('cors');
 let express = require('express');
 let bodyParser = require('body-parser');
 
-let module_db = require('./modules/mysqlConnect');
-let dbquery = require('./config/query');
-
-let config = require('./config/jwt'); 
+let api = require('./routes');
 
 let app = express();
 let server = http.createServer(app);
 let port = process.env.PORT || 8080;
 
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use(cors());
 
-app.set('jwt-secret', config.secret);
+app.use('/', api);
 
-module_db.startDB();
-
+app.get('*', (request, response) => {
+	response.redirect('/');
+});
 app.get('/', (request, response) => {
-	module_db.excuteDB(dbquery.getUserInfo, (result) => {
-		console.log(result[0].uid);
-	});
+	response.send('SolviBackEnd');
 });
 
 server.listen(port, () => {
