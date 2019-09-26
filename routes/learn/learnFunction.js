@@ -68,5 +68,8 @@ module.exports = {
 				});	
 			}
 		});
+	},
+	team: (cid, token, callback) => {
+		
 	}
 };
