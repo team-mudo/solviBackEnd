@@ -98,5 +98,57 @@ module.exports = {
 				});
 			}
 		});
+	},
+	teamCreate: (cid, teamname, token, callback) => {
+		let query1 = dbQuery.createTeam1;
+		let query2 = dbQuery.createTeam2;		
+		query1 = query1.replace('${teamname}', `"${teamname}"`);
+		query2 = query2.replace('${cid}', cid);
+		
+		webToken.isToken(token, (result) => {
+			if(!result.isToken) {
+				callback({"message": "token is invalid"});
+			} else {
+				connection.query(query1, (error, row) => {
+					if(error) throw error;
+					const tid = row.insertId;
+					query2 = query2.replace('${tid}', tid);
+					connection.query(query2, (error, row) => {
+						if(error) throw error;
+						callback({ "tid": row.insertId });
+					});
+				});				
+			}
+		});
+	},
+	teamRemove: (tid, token, callback) => {
+		let query1 = dbQuery.removeTeam1;
+		let query2 = dbQuery.removeTeam2;
+		query1 = query1.replace('${tid}', `"${tid}"`);
+		query2 = query2.replace('${tid}', `"${tid}"`);
+		
+		webToken.isToken(token, (result) => {
+			if(!result.isToken) {
+				callback({"message": "token is invalid"});
+			} else {
+				connection.query(query1, (error, row) => {
+					if(error) throw error;
+					connection.query(query2, (error, row) => {
+						if(error) throw error;
+						callback({"message": "SUCCESS remove Team"});
+					});
+				});
+			}
+		});
+	},
+	teamInvite: (email, tid, token, callback) => {
+		let query = dbQuery.
+		webToken.isToken(token, (result) => {
+			if(!result.isToken) { 
+				callback({"message": "token is invalid"});
+			} else {
+				connection.query()
+			}
+		});
 	}
 };
