@@ -70,6 +70,18 @@ module.exports = {
 		});
 	},
 	team: (cid, token, callback) => {
+		let query = dbQuery.getTeam;
+		query = query.replace('${cid}', `"${cid}"`);
 		
+		webToken.isToken(token, (result) => {
+			if(!result.isToken) {
+				callback({"message": "token is invalid"});
+			} else {
+				connection.query(query, (error, row) => {
+					if(error) throw error;
+					callback(row);
+				});				
+			}
+		});	
 	}
 };
