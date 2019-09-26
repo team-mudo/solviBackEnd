@@ -142,12 +142,37 @@ module.exports = {
 		});
 	},
 	teamInvite: (email, tid, token, callback) => {
-		let query = dbQuery.
+		let query1 = dbQuery.isUser;
+		let query2 = dbQuery.teamInvite1;
+		let query3 = dbQuery.teamInvite2;
+		query1 = query1.replace('${email}', email);
+		query2 = query2.replace('${team}', tid);
+		query3 = query3.replace('${tid}', tid);
+
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) { 
 				callback({"message": "token is invalid"});
 			} else {
-				connection.query()
+				connection.query(query1, (error, row) => {
+					if(error) throw error;
+					if(row.length === 0) {
+						callback({"message": "ERROR: email is not exist"});
+					}
+					console.log(row);
+					const uid = row[0].uid;
+					query2 = query2.replace('${user}', uid);
+					query3 = query3.replace('${uid}', uid);
+					connection.query(query3, (error, row) => {
+						if(error) throw error;
+						if(row.length !== 0){
+							callback({"message": "ERROR: user is already exist in team"});
+						} else {
+							connection.query(query2, (error, row) => {
+								callback({"message": "SUCCESS: invite USER"});
+							});
+						}
+					});
+				});
 			}
 		});
 	}
