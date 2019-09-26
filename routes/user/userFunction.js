@@ -13,7 +13,6 @@ module.exports = {
 		query2 = query2.replace('${email}', `"${email}"`);
 		query2 = query2.replace('${password}', `"${password}"`);
 		query2 = query2.replace('${nickname}', `"${nickname}"`);
-
 		connection.query(query1, (error, result) => {
 			if(error) throw error;
 			if(result.length) {
@@ -39,6 +38,7 @@ module.exports = {
 					callback({"message": "ERROR: password error!"});
 				} else {
 					webToken.getToken({
+						uid: result[0].uid,
 						email: result[0].email, 
 						nickname: result[0].nickname
 					}, (token) => {
