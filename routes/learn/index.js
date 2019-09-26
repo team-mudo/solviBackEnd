@@ -44,7 +44,19 @@ router.post('/team', (request, response) => {
 		response.end(JSON.stringify(result));
 	});
 });
-router.post('/team/create', (request, response) => {});
-router.post('/team/remove', (request, response) => {});
+router.post('/team/user', (request, response) => {
+	
+	let tid = request.body.tid;
+	let token = request.body.token;
 
+	learnFunction.teamUser(tid, token, (result) => {
+		response.writeHead(200);
+		response.end(JSON.stringify(result));
+	});
+});
+router.post('/team/create', (request, response) => {
+
+});
+router.post('/team/remove', (request, response) => {});
+router.post('/team/invite', (request, response) => {});
 module.exports = router;

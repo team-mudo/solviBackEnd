@@ -50,7 +50,7 @@ module.exports = {
 	remove: (cid, token, callback) => {
 		let query1 = dbQuery.removeClass1; 
 		let query2 = dbQuery.removeClass2;
-		
+		/* 종속된 수업 지우기 */		
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
 				callback({"message": "token is invalid"});
@@ -83,5 +83,20 @@ module.exports = {
 				});				
 			}
 		});	
+	},
+	teamUser: (tid, token, callback) => {
+		let query = dbQuery.getTeamUser;
+		query = query.replace('${tid}', `"${tid}"`);
+	
+		webToken.isToken(token, (result) => {
+			if(!result.isToken) {
+				callback({"message": "token is invalid"});
+			} else {
+				connection.query(query, (error, row) => {
+					if(error) throw error;
+					callback(row);	
+				});
+			}
+		});
 	}
 };
