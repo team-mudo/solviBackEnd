@@ -158,7 +158,6 @@ module.exports = {
 					if(row.length === 0) {
 						callback({"message": "ERROR: email is not exist"});
 					}
-					console.log(row);
 					const uid = row[0].uid;
 					query2 = query2.replace('${user}', uid);
 					query3 = query3.replace('${uid}', uid);
