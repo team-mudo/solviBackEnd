@@ -7,6 +7,6 @@ let router = express.Router();
 
 router.use('/user', user);
 router.use('/learn', learn);
-//router.use('/team', team);
+router.use('/team', team);
 
 module.exports = router;

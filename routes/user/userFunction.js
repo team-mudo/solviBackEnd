@@ -16,11 +16,11 @@ module.exports = {
 		connection.query(query1, (error, result) => {
 			if(error) throw error;
 			if(result.length) {
-				callback({"message": "ERROR: email is already exist!"});
+				callback({"result": 0, "message": "ERROR: email is already exist!"});
 			} else {
 				connection.query(query2, (error, result) => {
 					if(error) throw error;
-					callback({"message": "SUCCESS: register"});
+					callback({"result": 1, "message": "SUCCESS: register"});
 				});
 			}
 		});
@@ -32,15 +32,16 @@ module.exports = {
 		connection.query(query, (error, result) => {
 			if(error) throw error;
 			if(result.length !== 1) {
-				callback({"message": "ERROR: email is not exist!"});
+				callback({"result": 0, "message": "ERROR: email is not exist!"});
 			} else {
 				if(result[0].password !== password) {
-					callback({"message": "ERROR: password error!"});
+					callback({"result": 0, "message": "ERROR: password error!"});
 				} else {
 					webToken.getToken({
 						uid: result[0].uid,
 						email: result[0].email, 
-						nickname: result[0].nickname
+						nickname: result[0].nickname,
+						auth: result[0].auth
 					}, (token) => {
 						callback({token});
 					});
@@ -51,7 +52,7 @@ module.exports = {
 	info: (token, callback) => {
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
-				callback({"message": "token is invalid"});
+				callback({"result": 0, "message": "token is invalid"});
 			} else {
 				callback(result.userInfo);
 			}

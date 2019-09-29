@@ -15,7 +15,7 @@ module.exports = {
 		
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
-				callback({"message": "token is invalid"});
+				callback({"result": 0, "message": "token is invalid"});
 			} else {
 				connection.query(query1, (error, row) => {
 					if(error) throw error;	
@@ -36,7 +36,7 @@ module.exports = {
 		
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
-				callback({"message": "token is invalid"});
+				callback({"result": 0, "message": "token is invalid"});
 			} else {
 				const { uid } = result.userInfo;
 				query = query.replace('${uid}', `"${uid}"`);
@@ -53,7 +53,7 @@ module.exports = {
 		/* 종속된 수업 지우기 */		
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
-				callback({"message": "token is invalid"});
+				callback({"result": 0,"message": "token is invalid"});
 			} else {
 				const { uid } = result.userInfo;
 				query1 = query1.replace('${uid}',`"${uid}"`);
@@ -63,7 +63,7 @@ module.exports = {
 					if(error) throw error;
 					connection.query(query2, (error, row) => {
 						if(error) throw error;
-						callback({"message": "SUCCESS: remove Class"});
+						callback({"result": 1, "message": "SUCCESS: remove Class"});
 					});
 				});	
 			}
@@ -75,7 +75,7 @@ module.exports = {
 		
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
-				callback({"message": "token is invalid"});
+				callback({"result": 0, "message": "token is invalid"});
 			} else {
 				connection.query(query, (error, row) => {
 					if(error) throw error;
@@ -90,7 +90,7 @@ module.exports = {
 	
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
-				callback({"message": "token is invalid"});
+				callback({"result": 0, "message": "token is invalid"});
 			} else {
 				connection.query(query, (error, row) => {
 					if(error) throw error;
@@ -107,7 +107,7 @@ module.exports = {
 		
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
-				callback({"message": "token is invalid"});
+				callback({"result": 0,"message": "token is invalid"});
 			} else {
 				connection.query(query1, (error, row) => {
 					if(error) throw error;
@@ -129,13 +129,13 @@ module.exports = {
 		
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
-				callback({"message": "token is invalid"});
+				callback({"result": 0, "message": "token is invalid"});
 			} else {
 				connection.query(query1, (error, row) => {
 					if(error) throw error;
 					connection.query(query2, (error, row) => {
 						if(error) throw error;
-						callback({"message": "SUCCESS remove Team"});
+						callback({"result": 1, "message": "SUCCESS remove Team"});
 					});
 				});
 			}
@@ -151,12 +151,12 @@ module.exports = {
 
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) { 
-				callback({"message": "token is invalid"});
+				callback({"result": 0, "message": "token is invalid"});
 			} else {
 				connection.query(query1, (error, row) => {
 					if(error) throw error;
 					if(row.length === 0) {
-						callback({"message": "ERROR: email is not exist"});
+						callback({"result": 0, "message": "ERROR: email is not exist"});
 					}
 					const uid = row[0].uid;
 					query2 = query2.replace('${user}', uid);
@@ -164,10 +164,10 @@ module.exports = {
 					connection.query(query3, (error, row) => {
 						if(error) throw error;
 						if(row.length !== 0){
-							callback({"message": "ERROR: user is already exist in team"});
+							callback({"result": 0, "message": "ERROR: user is already exist in team"});
 						} else {
 							connection.query(query2, (error, row) => {
-								callback({"message": "SUCCESS: invite USER"});
+								callback({"result":1, "message": "SUCCESS: invite USER"});
 							});
 						}
 					});
