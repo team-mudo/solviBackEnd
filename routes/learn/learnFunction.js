@@ -11,7 +11,6 @@ module.exports = {
 		let query2 = dbQuery.createClass2;
 		query1 = query1.replace('${classname}', `"${classname}"`);
 		query1 = query1.replace('${explain}', `"${explain}"`);
-		console.log(query1);
 		
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
@@ -25,7 +24,12 @@ module.exports = {
 					query2 = query2.replace('${cid}',`"${cid}"`);
 					connection.query(query2, (error, row) => {
 						if(error) throw error;
-						callback({ "cid": cid });
+						callback({ 
+							"superUser": uid, 
+							"cid": cid, 
+							"classname": classname, 
+							"explain": explain 
+						});
 					});
 				});
 			}
@@ -50,6 +54,7 @@ module.exports = {
 	remove: (cid, token, callback) => {
 		let query1 = dbQuery.removeClass1; 
 		let query2 = dbQuery.removeClass2;
+		let query3 = dbQuery.removeClass3;
 		/* 종속된 수업 지우기 */		
 		webToken.isToken(token, (result) => {
 			if(!result.isToken) {
@@ -59,11 +64,15 @@ module.exports = {
 				query1 = query1.replace('${uid}',`"${uid}"`);
 				query1 = query1.replace('${cid}',`"${cid}"`);
 				query2 = query2.replace('${cid}',`"${cid}"`);
+				query3 = query3.replace('${cid}',`"${cid}"`);
 				connection.query(query1, (error, row) => {
 					if(error) throw error;
-					connection.query(query2, (error, row) => {
+					connection.query(query3, (error, row) => {
 						if(error) throw error;
-						callback({"result": 1, "message": "SUCCESS: remove Class"});
+						connection.query(query2, (error, row) => {
+							if(error) throw error;
+							callback({"result": 1, "message": "SUCCESS: remove Class"});
+						});
 					});
 				});	
 			}
