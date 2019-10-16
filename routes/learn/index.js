@@ -86,4 +86,15 @@ router.post('/team/invite', (request, response) => {
 		response.end(JSON.stringify(result));
 	});
 });
+router.post('/team/out', (request, response) => {
+
+        let uid = request.body.uid;
+        let tid = request.body.tid;
+        let token = request.body.token;
+
+        learnFunction.teamOut(uid, tid, token, (result) => {
+                response.writeHead(200);
+                response.end(JSON.stringify(result));
+        });
+});
 module.exports = router;

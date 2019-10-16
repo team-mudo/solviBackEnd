@@ -150,6 +150,22 @@ module.exports = {
 			}
 		});
 	},
+        teamOut: (uid, tid, token, callback) => {
+                let query = dbQuery.removeUser;
+                query = query.replace('${tid}', tid);
+                query = query.replace('${uid}', uid);
+
+                webToken.isToken(token, (result) => {
+                        if(!result.isToken) {
+                                callback({"result": 0, "message": "token is invalid"});
+                        } else {
+                                connection.query(query, (error, row) => {
+                                        if(error) throw error;
+                                        callback({"result": 1, "message": "SUCCESS: remove User"});
+                                });
+                        }
+                });
+        },
 	teamInvite: (email, tid, token, callback) => {
 		let query1 = dbQuery.isUser;
 		let query2 = dbQuery.teamInvite1;

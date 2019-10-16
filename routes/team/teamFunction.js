@@ -53,5 +53,20 @@ module.exports = {
                         }
                 });
         },
-
+	del: (token, tid, callback) => {
+                let query = dbQuery.delTeam;
+                query = query.replace('${tid}', tid);
+                webToken.isToken(token, (result) => {
+                        if(!result.isToken) {
+                                callback({"result": 0, "message": "token is invalid"});
+                        } else {
+                                const { uid } = result.userInfo;
+                                query = query.replace('${uid}', uid);
+                                connection.query(query, (error, row) => {
+                                        if(error) throw error;
+                                        callback({"result": 1, "message": "SUCCESS: del team"});
+                                });
+                        }
+                });
+        },
 };

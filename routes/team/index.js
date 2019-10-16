@@ -35,4 +35,15 @@ router.post('/leave', (request, response) => {
         });
 });
 
+router.post('/del', (request, response) => {
+
+        let token = request.body.token;
+        let tid = request.body.tid;
+
+        teamFunction.del(token, tid, (result) => {
+                response.writeHead(200);
+                response.end(JSON.stringify(result));
+        });
+});
+
 module.exports = router; 
